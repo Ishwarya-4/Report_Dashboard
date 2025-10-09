@@ -205,34 +205,98 @@ const Index = () => {
 
         {/* KPIs */}
         {kpis && (
-          <div className="mb-8">
-            <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8 gap-4">
-              <KPICard title="Total Mailable" value={kpis.totalMailable} />
-              <KPICard title="Emailed" value={kpis.emailedTotalMailable} />
-              <KPICard title="No Email" value={kpis.noEmailTotalMailable} />
-              <KPICard title="AAI" value={kpis.aai} />
-              <KPICard title="ADM" value={kpis.adm} />
-              <KPICard title="CyberSecurity" value={kpis.cybersecurity} />
-              <KPICard title="OSM" value={kpis.osm} />
-              <KPICard title="Portfolio" value={kpis.portfolio} />
-              
-              <KPICard title="Active" value={kpis.active} />
-              <KPICard title="Emailed" value={kpis.emailedActive} />
-              <KPICard title="No Email" value={kpis.noEmailActive} />
-              <KPICard title="Total Database" value={kpis.totalDatabase} />
-              <KPICard title="Unmailable" value={kpis.unmailable} />
-              <KPICard title="Hardbounce" value={kpis.hardBounce} />
-              <KPICard title="Unsubscribed" value={kpis.unsubscribed} />
-              <div className="hidden xl:block"></div>
-              
-              <KPICard title="Inactive" value={kpis.inactive} />
-              <KPICard title="Emailed" value={kpis.emailedInactive} />
-              <KPICard title="No Email" value={kpis.noEmailInactive} />
-              <KPICard title="Sept Prosprecs" value={kpis.monthlyProspects} />
-              <KPICard title="Sept Mailable" value={kpis.monthlyMailable} />
-              <KPICard title="Sept Emailed" value={kpis.monthlyEmailed} />
-              <KPICard title="Unknown" value={kpis.unknown} />
-              <KPICard title="Empty PG" value={kpis.emptyPG} />
+          <div className="mb-8 space-y-4">
+            {/* Row 1: Total Mailable group + Product Groups */}
+            <div className="flex flex-wrap gap-4">
+              <div className="flex gap-4 flex-1 min-w-0">
+                <div className="flex-1 min-w-[120px]">
+                  <KPICard title="Total Mailable" value={kpis.totalMailable} />
+                </div>
+                <div className="flex-1 min-w-[120px]">
+                  <KPICard title="Emailed" value={kpis.emailedTotalMailable} />
+                </div>
+                <div className="flex-1 min-w-[120px]">
+                  <KPICard title="No Email" value={kpis.noEmailTotalMailable} />
+                </div>
+              </div>
+              <div className="flex gap-4 flex-[1.6] min-w-0">
+                <div className="flex-1 min-w-[120px]">
+                  <KPICard title="AAI" value={kpis.aai} />
+                </div>
+                <div className="flex-1 min-w-[120px]">
+                  <KPICard title="ADM" value={kpis.adm} />
+                </div>
+                <div className="flex-1 min-w-[120px]">
+                  <KPICard title="CyberSecurity" value={kpis.cybersecurity} />
+                </div>
+                <div className="flex-1 min-w-[120px]">
+                  <KPICard title="OSM" value={kpis.osm} />
+                </div>
+                <div className="flex-1 min-w-[120px]">
+                  <KPICard title="Portfolio" value={kpis.portfolio} />
+                </div>
+              </div>
+            </div>
+
+            {/* Row 2: Active group + Database Metrics */}
+            <div className="flex flex-wrap gap-4">
+              <div className="flex gap-4 flex-1 min-w-0">
+                <div className="flex-1 min-w-[120px]">
+                  <KPICard title="Active" value={kpis.active} />
+                </div>
+                <div className="flex-1 min-w-[120px]">
+                  <KPICard title="Emailed" value={kpis.emailedActive} />
+                </div>
+                <div className="flex-1 min-w-[120px]">
+                  <KPICard title="No Email" value={kpis.noEmailActive} />
+                </div>
+              </div>
+              <div className="flex gap-4 flex-[1.3] min-w-0">
+                <div className="flex-1 min-w-[120px]">
+                  <KPICard title="Total Database" value={kpis.totalDatabase} />
+                </div>
+                <div className="flex-1 min-w-[120px]">
+                  <KPICard title="Unmailable" value={kpis.unmailable} />
+                </div>
+                <div className="flex-1 min-w-[120px]">
+                  <KPICard title="Hardbounce" value={kpis.hardBounce} />
+                </div>
+                <div className="flex-1 min-w-[120px]">
+                  <KPICard title="Unsubscribed" value={kpis.unsubscribed} />
+                </div>
+              </div>
+            </div>
+
+            {/* Row 3: Inactive group + Monthly Metrics */}
+            <div className="flex flex-wrap gap-4">
+              <div className="flex gap-4 flex-1 min-w-0">
+                <div className="flex-1 min-w-[120px]">
+                  <KPICard title="Inactive" value={kpis.inactive} />
+                </div>
+                <div className="flex-1 min-w-[120px]">
+                  <KPICard title="Emailed" value={kpis.emailedInactive} />
+                </div>
+                <div className="flex-1 min-w-[120px]">
+                  <KPICard title="No Email" value={kpis.noEmailInactive} />
+                </div>
+              </div>
+              <div className="flex gap-4 flex-[1.6] min-w-0">
+                <div className="flex-1 min-w-[120px]">
+                  <KPICard title="Sept Prosprecs" value={kpis.monthlyProspects} />
+                </div>
+                <div className="flex-1 min-w-[120px]">
+                  <KPICard title="Sept Mailable" value={kpis.monthlyMailable} />
+                </div>
+                <div className="flex-1 min-w-[120px]">
+                  <KPICard title="Sept Emailed" value={kpis.monthlyEmailed} />
+                </div>
+                <div className="flex-1 min-w-[120px]">
+                  <KPICard title="Unknown" value={kpis.unknown} />
+                </div>
+                <div className="flex-1 min-w-[120px]">
+                  <KPICard title="Empty PG" value={kpis.emptyPG} />
+                </div>
+              </div>
             </div>
           </div>
         )}
