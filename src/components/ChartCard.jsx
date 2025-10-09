@@ -65,7 +65,7 @@ export const ChartCard = ({ title, data, options, type = 'horizontal' }) => {
   };
 
   return (
-    <div className="bg-card rounded-xl p-6 shadow-[0_2px_8px_rgba(0,0,0,0.08)] hover:shadow-[0_4px_12px_rgba(0,0,0,0.12)] transition-shadow duration-200 border border-border">
+    <div className="bg-card rounded-xl p-6 shadow-[0_2px_8px_rgba(0,0,0,0.08)] hover:shadow-[0_4px_12px_rgba(0,0,0,0.12)] transition-shadow duration-200 border border-border w-full">
       <h3 className="text-primary font-semibold text-base mb-4">{title}</h3>
       <div style={{ height: type === 'horizontal' ? '400px' : '350px' }}>
         <Bar data={data} options={defaultOptions} />
