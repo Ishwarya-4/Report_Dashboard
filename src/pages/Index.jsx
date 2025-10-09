@@ -115,15 +115,33 @@ const Index = () => {
     emptyPG: calculateSum(rawData, 'Empty_PG')
   } : null;
 
-  // Chart data generation
-  const generateRegionChart = (valueColumn, label, color) => {
+  // Chart data generation with professional color palette
+  const professionalColors = [
+    'rgba(59, 130, 246, 0.85)',   // Blue
+    'rgba(16, 185, 129, 0.85)',   // Emerald
+    'rgba(139, 92, 246, 0.85)',   // Purple
+    'rgba(245, 158, 11, 0.85)',   // Amber
+    'rgba(239, 68, 68, 0.85)',    // Red
+    'rgba(14, 165, 233, 0.85)',   // Sky
+    'rgba(236, 72, 153, 0.85)',   // Pink
+    'rgba(34, 197, 94, 0.85)',    // Green
+    'rgba(168, 85, 247, 0.85)',   // Violet
+    'rgba(251, 146, 60, 0.85)',   // Orange
+    'rgba(6, 182, 212, 0.85)',    // Cyan
+    'rgba(132, 204, 22, 0.85)'    // Lime
+  ];
+
+  const generateRegionChart = (valueColumn, label) => {
     const regionData = aggregateByRegion(filteredData, valueColumn);
+    const dataValues = Object.values(regionData);
+    const colors = dataValues.map((_, index) => professionalColors[index % professionalColors.length]);
+    
     return {
       labels: Object.keys(regionData),
       datasets: [{
         label: label,
-        data: Object.values(regionData),
-        backgroundColor: color,
+        data: dataValues,
+        backgroundColor: colors,
         borderRadius: 4
       }]
     };
@@ -131,23 +149,14 @@ const Index = () => {
 
   const generateProductGroupChart = (prefix, name) => {
     const data = getProductGroupData(filteredData, prefix);
-    const colors = [
-      'rgba(59, 130, 246, 0.8)',
-      'rgba(34, 197, 94, 0.8)',
-      'rgba(251, 146, 60, 0.8)',
-      'rgba(168, 85, 247, 0.8)',
-      'rgba(236, 72, 153, 0.8)',
-      'rgba(239, 68, 68, 0.8)',
-      'rgba(14, 165, 233, 0.8)',
-      'rgba(132, 204, 22, 0.8)',
-      'rgba(163, 163, 163, 0.8)'
-    ];
+    const dataValues = Object.values(data);
+    const colors = dataValues.map((_, index) => professionalColors[index % professionalColors.length]);
     
     return {
       labels: Object.keys(data),
       datasets: [{
         label: name,
-        data: Object.values(data),
+        data: dataValues,
         backgroundColor: colors,
         borderRadius: 4
       }]
@@ -303,11 +312,11 @@ const Index = () => {
 
         {/* Charts */}
         {filteredData.length > 0 && (
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
             {shouldShowChart('total-mailable') && (
               <ChartCard
                 title="Total Mailable Prospects in Each Region"
-                data={generateRegionChart('Total_Mailable_Count', 'Total Mailable', 'rgba(59, 130, 246, 0.8)')}
+                data={generateRegionChart('Total_Mailable_Count', 'Total Mailable')}
                 type="horizontal"
               />
             )}
@@ -315,7 +324,7 @@ const Index = () => {
             {shouldShowChart('active-region') && (
               <ChartCard
                 title="Active in Each Region"
-                data={generateRegionChart('Active_Count', 'Active', 'rgba(34, 197, 94, 0.8)')}
+                data={generateRegionChart('Active_Count', 'Active')}
                 type="horizontal"
               />
             )}
@@ -323,7 +332,7 @@ const Index = () => {
             {shouldShowChart('inactive-region') && (
               <ChartCard
                 title="Inactive in Each Region"
-                data={generateRegionChart('Inactive_Count', 'Inactive', 'rgba(239, 68, 68, 0.8)')}
+                data={generateRegionChart('Inactive_Count', 'Inactive')}
                 type="horizontal"
               />
             )}
@@ -331,7 +340,7 @@ const Index = () => {
             {shouldShowChart('total-emailed') && (
               <ChartCard
                 title="Total Emailed Last 30 Days in Each Region"
-                data={generateRegionChart('Total_Mailable_Emailed', 'Total Emailed', 'rgba(168, 85, 247, 0.8)')}
+                data={generateRegionChart('Total_Mailable_Emailed', 'Total Emailed')}
                 type="horizontal"
               />
             )}
@@ -339,7 +348,7 @@ const Index = () => {
             {shouldShowChart('active-emailed') && (
               <ChartCard
                 title="Active Emailed Last 30 Days in Each Region"
-                data={generateRegionChart('Active_Emailed', 'Active Emailed', 'rgba(251, 146, 60, 0.8)')}
+                data={generateRegionChart('Active_Emailed', 'Active Emailed')}
                 type="horizontal"
               />
             )}
@@ -347,7 +356,7 @@ const Index = () => {
             {shouldShowChart('inactive-emailed') && (
               <ChartCard
                 title="Inactive Emailed Last 30 Days in Each Region"
-                data={generateRegionChart('Inactive_Emailed', 'Inactive Emailed', 'rgba(236, 72, 153, 0.8)')}
+                data={generateRegionChart('Inactive_Emailed', 'Inactive Emailed')}
                 type="horizontal"
               />
             )}
@@ -355,7 +364,7 @@ const Index = () => {
             {shouldShowChart('unknown') && (
               <ChartCard
                 title="Unknown in Each Region"
-                data={generateRegionChart('Unknown_Count', 'Unknown', 'rgba(163, 163, 163, 0.8)')}
+                data={generateRegionChart('Unknown_Count', 'Unknown')}
                 type="horizontal"
               />
             )}
@@ -363,7 +372,7 @@ const Index = () => {
             {shouldShowChart('empty-pg') && (
               <ChartCard
                 title="Empty Product Group in Each Region"
-                data={generateRegionChart('Empty_PG', 'Empty PG', 'rgba(14, 165, 233, 0.8)')}
+                data={generateRegionChart('Empty_PG', 'Empty PG')}
                 type="horizontal"
               />
             )}
@@ -371,7 +380,7 @@ const Index = () => {
             {shouldShowChart('sept-prospects') && (
               <ChartCard
                 title="September Prospects"
-                data={generateRegionChart('September_Prospects', 'September Prospects', 'rgba(132, 204, 22, 0.8)')}
+                data={generateRegionChart('September_Prospects', 'September Prospects')}
                 type="horizontal"
               />
             )}
@@ -379,7 +388,7 @@ const Index = () => {
             {shouldShowChart('sept-mailable') && (
               <ChartCard
                 title="September Mailable"
-                data={generateRegionChart('Mailable', 'Mailable', 'rgba(59, 130, 246, 0.8)')}
+                data={generateRegionChart('Mailable', 'Mailable')}
                 type="horizontal"
               />
             )}
@@ -387,7 +396,7 @@ const Index = () => {
             {shouldShowChart('sept-emailed') && (
               <ChartCard
                 title="September Emailed"
-                data={generateRegionChart('Emailed', 'Emailed', 'rgba(34, 197, 94, 0.8)')}
+                data={generateRegionChart('Emailed', 'Emailed')}
                 type="horizontal"
               />
             )}
