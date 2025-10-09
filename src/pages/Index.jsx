@@ -156,35 +156,43 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-50">
-      {/* Header */}
-      <div className="bg-gradient-to-r from-primary to-blue-600 text-white py-8 px-6 shadow-lg">
-        <h1 className="text-4xl font-bold text-center">Dashboard September</h1>
-      </div>
-
       <div className="container mx-auto px-4 py-8">
-        {/* Upload and Filters */}
-        <div className="bg-white rounded-xl shadow-md p-6 mb-8">
-          <div className="flex flex-wrap gap-4 items-center justify-between">
-            <div className="flex items-center gap-4">
-              <FileUpload onFileUpload={handleFileUpload} />
-              {fileName && (
-                <span className="text-sm text-muted-foreground">
-                  {fileName}
-                </span>
-              )}
-            </div>
-            {rawData.length > 0 && (
-              <Button 
-                onClick={handleClear} 
-                variant="outline"
-                className="border-destructive text-destructive hover:bg-destructive hover:text-white"
-              >
-                <RotateCcw className="mr-2 h-4 w-4" />
-                Clear
-              </Button>
-            )}
+        {/* Header Section */}
+        <div className="relative bg-white rounded-xl shadow-md p-8 mb-8">
+          {/* Clear Button - Top Right */}
+          {rawData.length > 0 && (
+            <Button 
+              onClick={handleClear} 
+              variant="outline"
+              className="absolute top-6 right-6 border-destructive text-destructive hover:bg-destructive hover:text-white"
+            >
+              <RotateCcw className="mr-2 h-4 w-4" />
+              Clear
+            </Button>
+          )}
+
+          {/* Title and Upload */}
+          <div className="text-center mb-6">
+            <h1 className="text-4xl font-bold text-primary mb-2">Email Performance Dashboard</h1>
+            <p className="text-muted-foreground">
+              Upload your email campaign data to visualize performance metrics
+            </p>
           </div>
-          
+
+          {/* File Upload Zone */}
+          {rawData.length === 0 ? (
+            <div className="max-w-2xl mx-auto">
+              <FileUpload onFileUpload={handleFileUpload} />
+            </div>
+          ) : (
+            <div className="text-center mb-6">
+              <p className="text-sm text-muted-foreground">
+                Current file: <span className="font-medium text-foreground">{fileName}</span>
+              </p>
+            </div>
+          )}
+
+          {/* Filters */}
           {rawData.length > 0 && (
             <div className="mt-6">
               <Filters
@@ -372,20 +380,6 @@ const Index = () => {
           </div>
         )}
 
-        {/* Empty State */}
-        {rawData.length === 0 && (
-          <div className="text-center py-20">
-            <div className="max-w-md mx-auto bg-white rounded-xl shadow-md p-8">
-              <h2 className="text-2xl font-semibold text-gray-700 mb-4">
-                Welcome to Email Campaign Dashboard
-              </h2>
-              <p className="text-gray-500 mb-6">
-                Upload your campaign data file (.csv, .xls, .xlsx, .xlsm) to get started
-              </p>
-              <FileUpload onFileUpload={handleFileUpload} />
-            </div>
-          </div>
-        )}
       </div>
     </div>
   );
