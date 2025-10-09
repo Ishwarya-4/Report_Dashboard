@@ -115,20 +115,20 @@ const Index = () => {
     emptyPG: calculateSum(rawData, 'Empty_PG')
   } : null;
 
-  // Chart data generation with professional color palette
+  // Chart data generation with professional color palette matching reference
   const professionalColors = [
-    'rgba(59, 130, 246, 0.85)',   // Blue
-    'rgba(16, 185, 129, 0.85)',   // Emerald
-    'rgba(139, 92, 246, 0.85)',   // Purple
-    'rgba(245, 158, 11, 0.85)',   // Amber
-    'rgba(239, 68, 68, 0.85)',    // Red
-    'rgba(14, 165, 233, 0.85)',   // Sky
-    'rgba(236, 72, 153, 0.85)',   // Pink
-    'rgba(34, 197, 94, 0.85)',    // Green
-    'rgba(168, 85, 247, 0.85)',   // Violet
-    'rgba(251, 146, 60, 0.85)',   // Orange
-    'rgba(6, 182, 212, 0.85)',    // Cyan
-    'rgba(132, 204, 22, 0.85)'    // Lime
+    'rgba(34, 211, 238, 0.9)',    // Cyan
+    'rgba(59, 130, 246, 0.9)',    // Blue
+    'rgba(20, 184, 166, 0.9)',    // Teal
+    'rgba(34, 197, 94, 0.9)',     // Green
+    'rgba(168, 85, 247, 0.9)',    // Purple
+    'rgba(251, 146, 60, 0.9)',    // Orange
+    'rgba(236, 72, 153, 0.9)',    // Pink
+    'rgba(14, 165, 233, 0.9)',    // Sky Blue
+    'rgba(132, 204, 22, 0.9)',    // Lime
+    'rgba(249, 115, 22, 0.9)',    // Dark Orange
+    'rgba(139, 92, 246, 0.9)',    // Violet
+    'rgba(16, 185, 129, 0.9)'     // Emerald
   ];
 
   const generateRegionChart = (valueColumn, label) => {
@@ -312,7 +312,7 @@ const Index = () => {
 
         {/* Charts */}
         {filteredData.length > 0 && (
-          <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {shouldShowChart('total-mailable') && (
               <ChartCard
                 title="Total Mailable Prospects in Each Region"
