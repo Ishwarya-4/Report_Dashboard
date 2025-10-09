@@ -88,31 +88,31 @@ const Index = () => {
     return selectedCharts.length === 0 || selectedCharts.includes(chartId);
   };
 
-  // KPI Calculations
-  const kpis = filteredData.length > 0 ? {
-    totalMailable: calculateSum(filteredData, 'Total_Mailable_Count'),
-    emailedTotalMailable: calculateSum(filteredData, 'Total_Mailable_Emailed'),
-    noEmailTotalMailable: calculateSum(filteredData, 'Total_Mailable_NoEmail'),
-    active: calculateSum(filteredData, 'Active_Count'),
-    emailedActive: calculateSum(filteredData, 'Active_Emailed'),
-    noEmailActive: calculateSum(filteredData, 'Active_NoEmail'),
-    inactive: calculateSum(filteredData, 'Inactive_Count'),
-    emailedInactive: calculateSum(filteredData, 'Inactive_Emailed'),
-    noEmailInactive: calculateSum(filteredData, 'Inactive_NoEmail'),
-    aai: calculateSum(filteredData, 'AAI_Total'),
-    adm: calculateSum(filteredData, 'ADM_Total'),
-    cybersecurity: calculateSum(filteredData, 'CBS_Total'),
-    osm: calculateSum(filteredData, 'OSM_Total'),
-    portfolio: calculateSum(filteredData, 'PFO_Total'),
-    totalDatabase: calculateSum(filteredData, 'Total_Database'),
-    unmailable: calculateSum(filteredData, 'Unmailable'),
-    hardBounce: calculateSum(filteredData, 'Hardbounce'),
-    unsubscribed: calculateSum(filteredData, 'Unsubscribed'),
-    monthlyProspects: calculateSum(filteredData, 'September_Prospects'),
-    monthlyMailable: calculateSum(filteredData, 'Mailable'),
-    monthlyEmailed: calculateSum(filteredData, 'Emailed'),
-    unknown: calculateSum(filteredData, 'Unknown_Count'),
-    emptyPG: calculateSum(filteredData, 'Empty_PG')
+  // KPI Calculations - Always use rawData (not filtered)
+  const kpis = rawData.length > 0 ? {
+    totalMailable: calculateSum(rawData, 'Total_Mailable_Count'),
+    emailedTotalMailable: calculateSum(rawData, 'Total_Mailable_Emailed'),
+    noEmailTotalMailable: calculateSum(rawData, 'Total_Mailable_NoEmail'),
+    active: calculateSum(rawData, 'Active_Count'),
+    emailedActive: calculateSum(rawData, 'Active_Emailed'),
+    noEmailActive: calculateSum(rawData, 'Active_NoEmail'),
+    inactive: calculateSum(rawData, 'Inactive_Count'),
+    emailedInactive: calculateSum(rawData, 'Inactive_Emailed'),
+    noEmailInactive: calculateSum(rawData, 'Inactive_NoEmail'),
+    aai: calculateSum(rawData, 'AAI_Total'),
+    adm: calculateSum(rawData, 'ADM_Total'),
+    cybersecurity: calculateSum(rawData, 'CBS_Total'),
+    osm: calculateSum(rawData, 'OSM_Total'),
+    portfolio: calculateSum(rawData, 'PFO_Total'),
+    totalDatabase: calculateSum(rawData, 'Total_Database'),
+    unmailable: calculateSum(rawData, 'Unmailable'),
+    hardBounce: calculateSum(rawData, 'Hardbounce'),
+    unsubscribed: calculateSum(rawData, 'Unsubscribed'),
+    monthlyProspects: calculateSum(rawData, 'September_Prospects'),
+    monthlyMailable: calculateSum(rawData, 'Mailable'),
+    monthlyEmailed: calculateSum(rawData, 'Emailed'),
+    unknown: calculateSum(rawData, 'Unknown_Count'),
+    emptyPG: calculateSum(rawData, 'Empty_PG')
   } : null;
 
   // Chart data generation
@@ -159,53 +159,46 @@ const Index = () => {
       <div className="container mx-auto px-4 py-8">
         {/* Header Section */}
         <div className="relative bg-white rounded-xl shadow-md p-8 mb-8">
-          {/* Clear Button - Top Right */}
-          {rawData.length > 0 && (
-            <Button 
-              onClick={handleClear} 
-              variant="outline"
-              className="absolute top-6 right-6 border-destructive text-destructive hover:bg-destructive hover:text-white"
-            >
-              <RotateCcw className="mr-2 h-4 w-4" />
-              Clear
-            </Button>
-          )}
-
           {/* Title and Upload */}
           <div className="text-center mb-6">
-            <h1 className="text-4xl font-bold text-primary mb-2">Email Performance Dashboard</h1>
-            <p className="text-muted-foreground">
-              Upload your email campaign data to visualize performance metrics
-            </p>
+            <h1 className="text-4xl font-bold text-primary mb-3">Email Performance Dashboard</h1>
+            {rawData.length === 0 && (
+              <p className="text-muted-foreground mb-6">
+                Upload your email campaign data to visualize performance metrics
+              </p>
+            )}
           </div>
 
           {/* File Upload Zone */}
           {rawData.length === 0 ? (
-            <div className="max-w-2xl mx-auto">
+            <div className="mt-6">
               <FileUpload onFileUpload={handleFileUpload} />
             </div>
           ) : (
-            <div className="text-center mb-6">
-              <p className="text-sm text-muted-foreground">
-                Current file: <span className="font-medium text-foreground">{fileName}</span>
-              </p>
-            </div>
-          )}
-
-          {/* Filters */}
-          {rawData.length > 0 && (
-            <div className="mt-6">
-              <Filters
-                regions={regions}
-                countries={countries}
-                selectedRegion={selectedRegion}
-                selectedCountry={selectedCountry}
-                onRegionChange={setSelectedRegion}
-                onCountryChange={setSelectedCountry}
-                charts={chartsList}
-                selectedCharts={selectedCharts}
-                onChartChange={handleChartChange}
-              />
+            <div className="flex flex-wrap gap-4 items-center">
+              <div className="flex-1 min-w-[200px]">
+                <Filters
+                  regions={regions}
+                  countries={countries}
+                  selectedRegion={selectedRegion}
+                  selectedCountry={selectedCountry}
+                  onRegionChange={setSelectedRegion}
+                  onCountryChange={setSelectedCountry}
+                  charts={chartsList}
+                  selectedCharts={selectedCharts}
+                  onChartChange={handleChartChange}
+                />
+              </div>
+              <div className="flex-shrink-0">
+                <Button 
+                  onClick={handleClear} 
+                  variant="outline"
+                  className="border-destructive text-destructive hover:bg-destructive hover:text-white"
+                >
+                  <RotateCcw className="mr-2 h-4 w-4" />
+                  Clear
+                </Button>
+              </div>
             </div>
           )}
         </div>
@@ -213,7 +206,7 @@ const Index = () => {
         {/* KPIs */}
         {kpis && (
           <div className="mb-8">
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-8 gap-3 mb-4">
+            <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8 gap-4">
               <KPICard title="Total Mailable" value={kpis.totalMailable} />
               <KPICard title="Emailed" value={kpis.emailedTotalMailable} />
               <KPICard title="No Email" value={kpis.noEmailTotalMailable} />
@@ -222,9 +215,7 @@ const Index = () => {
               <KPICard title="CyberSecurity" value={kpis.cybersecurity} />
               <KPICard title="OSM" value={kpis.osm} />
               <KPICard title="Portfolio" value={kpis.portfolio} />
-            </div>
-            
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-8 gap-3 mb-4">
+              
               <KPICard title="Active" value={kpis.active} />
               <KPICard title="Emailed" value={kpis.emailedActive} />
               <KPICard title="No Email" value={kpis.noEmailActive} />
@@ -232,9 +223,8 @@ const Index = () => {
               <KPICard title="Unmailable" value={kpis.unmailable} />
               <KPICard title="Hardbounce" value={kpis.hardBounce} />
               <KPICard title="Unsubscribed" value={kpis.unsubscribed} />
-            </div>
-            
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-8 gap-3">
+              <div className="hidden xl:block"></div>
+              
               <KPICard title="Inactive" value={kpis.inactive} />
               <KPICard title="Emailed" value={kpis.emailedInactive} />
               <KPICard title="No Email" value={kpis.noEmailInactive} />
@@ -249,7 +239,7 @@ const Index = () => {
 
         {/* Charts */}
         {filteredData.length > 0 && (
-          <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
             {shouldShowChart('total-mailable') && (
               <ChartCard
                 title="Total Mailable Prospects in Each Region"
