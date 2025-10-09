@@ -312,7 +312,7 @@ const Index = () => {
 
         {/* Charts */}
         {filteredData.length > 0 && (
-          <div className="grid grid-cols-3 gap-6">
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.5rem' }}>
             {shouldShowChart('total-mailable') && (
               <ChartCard
                 title="Total Mailable Prospects in Each Region"
