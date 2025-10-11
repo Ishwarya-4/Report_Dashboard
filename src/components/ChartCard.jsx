@@ -25,13 +25,7 @@ export const ChartCard = ({ title, data, options, type = 'horizontal' }) => {
     maintainAspectRatio: false,
     plugins: {
       legend: {
-        position: type === 'horizontal' ? 'bottom' : 'top',
-        labels: {
-          padding: 15,
-          font: {
-            size: 11
-          }
-        }
+        display: false
       },
       title: {
         display: false
@@ -66,8 +60,8 @@ export const ChartCard = ({ title, data, options, type = 'horizontal' }) => {
 
   return (
     <div className="bg-card rounded-xl p-6 shadow-[0_2px_8px_rgba(0,0,0,0.08)] hover:shadow-[0_4px_12px_rgba(0,0,0,0.12)] transition-shadow duration-200 border border-border w-full">
-      <h3 className="text-primary font-semibold text-base mb-4">{title}</h3>
-      <div style={{ height: type === 'horizontal' ? '400px' : '350px' }}>
+      <h3 className="text-center text-primary font-semibold text-base mb-4">{title}</h3>
+      <div style={{ height: type === 'horizontal' ? '230px' : '220px' }}>
         <Bar data={data} options={defaultOptions} />
       </div>
     </div>

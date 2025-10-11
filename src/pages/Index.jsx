@@ -73,8 +73,25 @@ const Index = () => {
     }
   }, [selectedRegion, selectedCountry, rawData]);
 
+  const onRegionChange = (value) => {
+    if (value === "clear" || value === 'all') {
+      setSelectedRegion("all"); // or "" if you prefer
+    } else {
+      setSelectedRegion(value);
+    }
+  };
+  
+  const onCountryChange = (value) => {
+    if (value === "clear" || value === 'all') {
+      setSelectedCountry("all"); // or "" depending on your app logic
+    } else {
+      setSelectedCountry(value);
+    }
+  };
+  
+
   const handleChartChange = (value) => {
-    if (value === 'all') {
+    if (value === 'all' || value === 'clear') {
       setSelectedCharts([]);
     } else {
       const currentCharts = selectedCharts.includes(value)
@@ -121,14 +138,14 @@ const Index = () => {
     'rgba(59, 130, 246, 0.9)',    // Blue
     'rgba(20, 184, 166, 0.9)',    // Teal
     'rgba(34, 197, 94, 0.9)',     // Green
-    'rgba(168, 85, 247, 0.9)',    // Purple
-    'rgba(251, 146, 60, 0.9)',    // Orange
-    'rgba(236, 72, 153, 0.9)',    // Pink
+    'rgb(0, 128, 102)',    // Purple
+    'rgb(38, 115, 153)',    // Orange
+    'rgb(0, 191, 173)',    // Pink
     'rgba(14, 165, 233, 0.9)',    // Sky Blue
     'rgba(132, 204, 22, 0.9)',    // Lime
-    'rgba(249, 115, 22, 0.9)',    // Dark Orange
-    'rgba(139, 92, 246, 0.9)',    // Violet
-    'rgba(16, 185, 129, 0.9)'     // Emerald
+    'rgb(0, 128, 170)',   // Dark Orange
+    'rgb(0, 140, 191)',    // Violet
+    'rgba(16, 185, 129, 0.9)'    // Emerald
   ];
 
   const generateRegionChart = (valueColumn, label) => {
@@ -164,13 +181,13 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-50">
-      <div className="mx-auto px-4 py-8 max-w-[1600px]">
+    <div className="min-h-screen bg-background py-8 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto space-y-8">
         {/* Header Section */}
-        <div className="relative bg-white rounded-xl shadow-md p-8 mb-8">
+        <div >
           {/* Title and Upload */}
-          <div className="text-center mb-6">
-            <h1 className="text-4xl font-bold text-primary mb-3">Email Performance Dashboard</h1>
+          <div className="text-center space-y-2">
+            <h1 className="text-4xl font-bold bg-gradient-to-br from-[hsl(217_91%_60%)] to-[hsl(263_70%_50%)] bg-clip-text text-transparent">Email Performance Dashboard</h1>
             {rawData.length === 0 && (
               <p className="text-muted-foreground mb-6">
                 Upload your email campaign data to visualize performance metrics
@@ -178,27 +195,39 @@ const Index = () => {
             )}
           </div>
 
-          {/* File Upload Zone */}
-          {rawData.length === 0 ? (
-            <div className="mt-6">
-              <FileUpload onFileUpload={handleFileUpload} />
+          {/* File Upload / Filters Row */}
+            {rawData.length === 0 ? (
+            <div className="flex items-center gap-4 mt-10">
+              <div className="flex-1">
+                <FileUpload onFileUpload={handleFileUpload} />
+              </div>
+              <div className="flex items-center ml-12">
+                <Button 
+                  onClick={handleClear} 
+                  variant="outline"
+                  className="border-destructive text-destructive hover:bg-destructive hover:text-white"
+                >
+                  <RotateCcw className="mr-2 h-4 w-4" />
+                  Clear
+                </Button>
+              </div>
             </div>
           ) : (
-            <div className="flex flex-wrap gap-4 items-center">
+            <div className="flex flex-wrap gap-20 items-center">
               <div className="flex-1 min-w-[200px]">
                 <Filters
                   regions={regions}
                   countries={countries}
                   selectedRegion={selectedRegion}
                   selectedCountry={selectedCountry}
-                  onRegionChange={setSelectedRegion}
-                  onCountryChange={setSelectedCountry}
+                  onRegionChange={onRegionChange}
+                  onCountryChange={onCountryChange}
                   charts={chartsList}
                   selectedCharts={selectedCharts}
                   onChartChange={handleChartChange}
                 />
               </div>
-              <div className="flex-shrink-0">
+              <div className="flex items-center mt-16">
                 <Button 
                   onClick={handleClear} 
                   variant="outline"
@@ -212,97 +241,53 @@ const Index = () => {
           )}
         </div>
 
+        {/* Upload helper text when empty */}
+        {rawData.length === 0 && (
+          <div className="text-center text-muted-foreground mt-10">
+            Upload a file to get started
+          </div>
+        )}
+
         {/* KPIs */}
         {kpis && (
-          <div className="mb-8 space-y-4">
-            {/* Row 1: Total Mailable group + Product Groups */}
-            <div className="flex flex-wrap gap-4">
-              <div className="flex gap-4 flex-1 min-w-0">
-                <div className="flex-1 min-w-[120px]">
-                  <KPICard title="Total Mailable" value={kpis.totalMailable} />
-                </div>
-                <div className="flex-1 min-w-[120px]">
-                  <KPICard title="Emailed" value={kpis.emailedTotalMailable} />
-                </div>
-                <div className="flex-1 min-w-[120px]">
-                  <KPICard title="No Email" value={kpis.noEmailTotalMailable} />
-                </div>
+          <div className="mb-8">
+            <div className="grid grid-cols-1 xl:grid-cols-[1fr_1.2fr] gap-10">
+              {/* Left: 3x3 (3 rows, 3 columns) */}
+              <div className="grid grid-cols-3 gap-4">
+                {/* Row 1 */}
+                <KPICard title="Total Mailable" value={kpis.totalMailable} />
+                <KPICard title="Emailed" value={kpis.emailedTotalMailable} />
+                <KPICard title="No Email" value={kpis.noEmailTotalMailable} />
+                {/* Row 2 */}
+                <KPICard title="Active" value={kpis.active} />
+                <KPICard title="Emailed" value={kpis.emailedActive} />
+                <KPICard title="No Email" value={kpis.noEmailActive} />
+                {/* Row 3 */}
+                <KPICard title="Inactive" value={kpis.inactive} />
+                <KPICard title="Emailed" value={kpis.emailedInactive} />
+                <KPICard title="No Email" value={kpis.noEmailInactive} />
               </div>
-              <div className="flex gap-4 flex-[1.6] min-w-0">
-                <div className="flex-1 min-w-[120px]">
+
+              {/* Right: 5, 4, 5 cards per row */}
+              <div className="space-y-4">
+                <div className="grid grid-cols-5 gap-4">
                   <KPICard title="AAI" value={kpis.aai} />
-                </div>
-                <div className="flex-1 min-w-[120px]">
                   <KPICard title="ADM" value={kpis.adm} />
-                </div>
-                <div className="flex-1 min-w-[120px]">
                   <KPICard title="CyberSecurity" value={kpis.cybersecurity} />
-                </div>
-                <div className="flex-1 min-w-[120px]">
                   <KPICard title="OSM" value={kpis.osm} />
-                </div>
-                <div className="flex-1 min-w-[120px]">
                   <KPICard title="Portfolio" value={kpis.portfolio} />
                 </div>
-              </div>
-            </div>
-
-            {/* Row 2: Active group + Database Metrics */}
-            <div className="flex flex-wrap gap-4">
-              <div className="flex gap-4 flex-1 min-w-0">
-                <div className="flex-1 min-w-[120px]">
-                  <KPICard title="Active" value={kpis.active} />
-                </div>
-                <div className="flex-1 min-w-[120px]">
-                  <KPICard title="Emailed" value={kpis.emailedActive} />
-                </div>
-                <div className="flex-1 min-w-[120px]">
-                  <KPICard title="No Email" value={kpis.noEmailActive} />
-                </div>
-              </div>
-              <div className="flex gap-4 flex-[1.3] min-w-0">
-                <div className="flex-1 min-w-[120px]">
+                <div className="grid grid-cols-4 gap-4">
                   <KPICard title="Total Database" value={kpis.totalDatabase} />
-                </div>
-                <div className="flex-1 min-w-[120px]">
                   <KPICard title="Unmailable" value={kpis.unmailable} />
-                </div>
-                <div className="flex-1 min-w-[120px]">
                   <KPICard title="Hardbounce" value={kpis.hardBounce} />
-                </div>
-                <div className="flex-1 min-w-[120px]">
                   <KPICard title="Unsubscribed" value={kpis.unsubscribed} />
                 </div>
-              </div>
-            </div>
-
-            {/* Row 3: Inactive group + Monthly Metrics */}
-            <div className="flex flex-wrap gap-4">
-              <div className="flex gap-4 flex-1 min-w-0">
-                <div className="flex-1 min-w-[120px]">
-                  <KPICard title="Inactive" value={kpis.inactive} />
-                </div>
-                <div className="flex-1 min-w-[120px]">
-                  <KPICard title="Emailed" value={kpis.emailedInactive} />
-                </div>
-                <div className="flex-1 min-w-[120px]">
-                  <KPICard title="No Email" value={kpis.noEmailInactive} />
-                </div>
-              </div>
-              <div className="flex gap-4 flex-[1.6] min-w-0">
-                <div className="flex-1 min-w-[120px]">
+                <div className="grid grid-cols-5 gap-4">
                   <KPICard title="Sept Prosprecs" value={kpis.monthlyProspects} />
-                </div>
-                <div className="flex-1 min-w-[120px]">
                   <KPICard title="Sept Mailable" value={kpis.monthlyMailable} />
-                </div>
-                <div className="flex-1 min-w-[120px]">
                   <KPICard title="Sept Emailed" value={kpis.monthlyEmailed} />
-                </div>
-                <div className="flex-1 min-w-[120px]">
                   <KPICard title="Unknown" value={kpis.unknown} />
-                </div>
-                <div className="flex-1 min-w-[120px]">
                   <KPICard title="Empty PG" value={kpis.emptyPG} />
                 </div>
               </div>
@@ -312,7 +297,7 @@ const Index = () => {
 
         {/* Charts */}
         {filteredData.length > 0 && (
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.5rem' }}>
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
             {shouldShowChart('total-mailable') && (
               <ChartCard
                 title="Total Mailable Prospects in Each Region"

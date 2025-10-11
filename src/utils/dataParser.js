@@ -21,6 +21,19 @@ export const parseExcelFile = async (file) => {
   });
 };
 
+// Robust number parser: handles numbers, numeric strings, and comma-formatted strings
+const parseNumber = (value) => {
+  if (value === null || value === undefined) return 0;
+  if (typeof value === 'number') return Number.isFinite(value) ? value : 0;
+  if (typeof value === 'string') {
+    const cleaned = value.replace(/,/g, '').trim();
+    if (cleaned === '') return 0;
+    const n = Number(cleaned);
+    return Number.isNaN(n) ? 0 : n;
+  }
+  return 0;
+};
+
 export const getUniqueValues = (data, key) => {
   return [...new Set(data.map(row => row[key]))].filter(Boolean).sort();
 };
@@ -40,7 +53,7 @@ export const filterData = (data, region, country) => {
 };
 
 export const calculateSum = (data, columnName) => {
-  return data.reduce((sum, row) => sum + (Number(row[columnName]) || 0), 0);
+  return data.reduce((sum, row) => sum + parseNumber(row[columnName]), 0);
 };
 
 export const aggregateByRegion = (data, valueColumn) => {
@@ -53,7 +66,7 @@ export const aggregateByRegion = (data, valueColumn) => {
     if (!regionData[region]) {
       regionData[region] = 0;
     }
-    regionData[region] += Number(row[valueColumn]) || 0;
+    regionData[region] += parseNumber(row[valueColumn]);
   });
   
   return regionData;
@@ -65,10 +78,10 @@ export const getProductGroupData = (data, prefix) => {
     'Active Emailed': calculateSum(data, `${prefix}_Active_Emailed`),
     'Active No Email': calculateSum(data, `${prefix}_Active_NoEmail`),
     Total: calculateSum(data, `${prefix}_Total`),
-    'Total Emailed': calculateSum(data, `${prefix}_Total${prefix === 'AAI' ? '_Email_Count' : '_Emailed'}`),
-    Inactive: calculateSum(data, `${prefix}_${prefix === 'ADM' || prefix === 'OSM' ? 'InActive' : 'Inactive'}`),
-    'Inactive Emailed': calculateSum(data, `${prefix}_${prefix === 'ADM' || prefix === 'OSM' ? 'InActive' : 'Inactive'}_Emailed`),
-    'Inactive No Email': calculateSum(data, `${prefix}_${prefix === 'ADM' || prefix === 'OSM' ? 'InActive' : 'Inactive'}_NoEmail`),
+    'Total Emailed': calculateSum(data, `${prefix}_Total_Emailed`),
+    Inactive: calculateSum(data, `${prefix}_Inactive`),
+    'Inactive Emailed': calculateSum(data, `${prefix}_Inactive_Emailed`),
+    'Inactive No Email': calculateSum(data, `${prefix}_Inactive_NoEmail`),
     Unknown: calculateSum(data, `${prefix}_Unknown`)
   };
   
