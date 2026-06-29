@@ -90,9 +90,4 @@ Report_Dashboard/
 
 ---
 
-## 🌐 Deployment
-
-This project is deployed to **GitHub Pages** via GitHub Actions. Every push to `main` automatically builds and publishes the latest version.
-
-See [DEPLOYMENT.md](./DEPLOYMENT.md) or the [deployment guide below](#deploying-to-github-pages) to set it up yourself.
 
